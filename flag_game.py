@@ -43,45 +43,76 @@ color = color_passive
 
 active = False
 
+# Dropdown - select country
+dropdown_rect = pygame.Rect(input_rect.x, input_rect.y + TEXT_HEIGHT + 5, TEXT_WIDTH + 20, TEXT_HEIGHT)
+dropdown_font = pygame.font.Font(None, TEXT_HEIGHT - 5)
+dropdown_visible = False
+filtered_countries = []
+
 status = True
-while (status):
+while status:
 
-	for event in pygame.event.get():
+    screen.fill((0, 0, 0))  # Clear screen for redrawing
+    screen.blit(imp, ((SCREEN_X - end_flag_x) / 2, 0))  # Redraw flag
 
-		if event.type == pygame.QUIT:
-			status = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            status = False
 
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			if input_rect.collidepoint(event.pos):
-				active = True
-			else:
-				active = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if input_rect.collidepoint(event.pos):
+                active = True
+            else:
+                active = False
 
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_BACKSPACE:
-				user_text = user_text[:-1]
-			elif event.key == pygame.K_RETURN:
-				if user_text == country_name:
-					print("Correct")
-				else:
-					print("Wrong")
-			else:
-				user_text += event.unicode
+            # Handle selection from the dropdown
+            if dropdown_visible:
+                for idx, country in enumerate(filtered_countries):
+                    option_rect = dropdown_rect.move(0, idx * TEXT_HEIGHT)
+                    if option_rect.collidepoint(event.pos):
+                        user_text = country
+                        dropdown_visible = False
+                        break
 
-	if active:
-		color = color_active
-	else:
-		color = color_passive
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                user_text = user_text[:-1]
+            elif event.key == pygame.K_RETURN:
+                if user_text.lower() == country_name.lower():
+                    print("Correct")
+                else:
+                    print("Wrong")
+            else:
+                user_text += event.unicode
 
-	pygame.draw.rect(screen, color, input_rect)
+            # Update dropdown visibility and filter list
+            if user_text.strip():
+                filtered_countries = [
+                    name for name in country_codes.values()
+                    if user_text.lower() in name.lower()
+                ]
+                dropdown_visible = bool(filtered_countries)
+            else:
+                dropdown_visible = False
 
-	text_surface = base_font.render(user_text, True, (255, 255, 255))
+    # Input box color
+    color = color_active if active else color_passive
 
-	screen.blit(text_surface, (input_rect.x+5, input_rect.y+5))
+    # Draw input box
+    pygame.draw.rect(screen, color, input_rect)
+    text_surface = base_font.render(user_text, True, (255, 255, 255))
+    screen.blit(text_surface, (input_rect.x + 5, input_rect.y + 5))
+    input_rect.w = max(100, text_surface.get_width() + 10)
 
-	input_rect.w = max(100, text_surface.get_width()+10)
+    # Draw dropdown
+    if dropdown_visible:
+        for idx, country in enumerate(filtered_countries):
+            option_rect = dropdown_rect.move(0, idx * TEXT_HEIGHT)
+            pygame.draw.rect(screen, (50, 50, 50), option_rect)
+            option_text = dropdown_font.render(country, True, (255, 255, 255))
+            screen.blit(option_text, (option_rect.x + 5, option_rect.y + 5))
 
-	pygame.display.flip()
+    pygame.display.flip()
 
 # deactivates the pygame library
 pygame.quit()
