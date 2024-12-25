@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import os
 from country_codes import country_codes
 from const import *
 
@@ -45,8 +46,14 @@ while status:
 
     if change_flag:
         # Pick country randomly
-        country_code, country_name = random.choice(list(country_codes.items()))
-        img_path = ".\\country-flags\\" + country_code.lower() + ".png"
+        found_flag = False
+        while not found_flag:
+            country_code, country_name = random.choice(list(country_codes.items()))
+            img_path = ".\\country-flags\\" + country_code.lower() + ".png"
+            if os.path.exists(img_path):
+                found_flag = True
+            else:
+                print("Flag not found. Country code: " + country_code + ", country name: " + country_name + "\n")
         imp = pygame.image.load(img_path).convert()
 
         # Redimensioning and positioning flag
