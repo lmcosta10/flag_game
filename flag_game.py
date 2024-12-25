@@ -1,18 +1,22 @@
 import pygame
 import sys
 from country_codes import country_codes
-import const
+from const import *
 
 pygame.init()
 
-screen = pygame.display.set_mode([const.SCREEN_X, const.SCREEN_Y])
+screen = pygame.display.set_mode([SCREEN_X, SCREEN_Y])
 
 pygame.display.set_caption('image')
 
 imp = pygame.image.load(".\\country-flags\\ad.png").convert()
+
+# Redimensioning and positioning flag
 flag_x = imp.get_width()
 flag_y = imp.get_height()
-flag_dim = (flag_x/2, flag_y/2)
+end_flag_x = flag_x/2
+end_flag_y = flag_y/2
+flag_dim = (end_flag_x, end_flag_y)
 imp = pygame.transform.scale(imp, flag_dim)
 
 # Using blit to copy content from one surface to other
@@ -21,10 +25,13 @@ screen.blit(imp, (0, 0))
 # paint screen one time
 pygame.display.flip()
 
-#####
-base_font = pygame.font.Font(None, 32) 
+## Text input
+# Dimensioning and positioning text input
+input_rect = pygame.Rect((SCREEN_X-TEXT_WIDTH)/2, end_flag_y, TEXT_WIDTH, TEXT_HEIGHT)
+# Text input font
+base_font = pygame.font.Font(None, TEXT_HEIGHT)
 user_text = ''
-input_rect = pygame.Rect(200, 200, 140, 32)
+# Text input color
 color_active = pygame.Color('lightskyblue3')
 color_passive = pygame.Color('chartreuse4')
 color = color_passive
