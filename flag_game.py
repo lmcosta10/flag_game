@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 from country_codes import country_codes
 from const import *
 
@@ -9,13 +10,11 @@ screen = pygame.display.set_mode([SCREEN_X, SCREEN_Y])
 
 pygame.display.set_caption('image')
 
-# Pick image
-img_path = ".\\country-flags\\ad.png"
+# Pick country randomly
+# TODO: check if there's an image for every country code
+country_code, country_name = random.choice(list(country_codes.items()))
+img_path = ".\\country-flags\\" + country_code.lower() + ".png"
 imp = pygame.image.load(img_path).convert()
-
-# Get code and country name
-country_code = img_path[-6:-4].upper()
-country_name = country_codes[country_code]
 
 # Redimensioning and positioning flag
 flag_x = imp.get_width()
@@ -26,7 +25,7 @@ flag_dim = (end_flag_x, end_flag_y)
 imp = pygame.transform.scale(imp, flag_dim)
 
 # Using blit to copy content from one surface to other
-screen.blit(imp, (0, 0))
+screen.blit(imp, ((SCREEN_X-end_flag_x)/2, 0))
 
 # paint screen one time
 pygame.display.flip()
