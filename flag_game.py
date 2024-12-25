@@ -9,7 +9,13 @@ screen = pygame.display.set_mode([SCREEN_X, SCREEN_Y])
 
 pygame.display.set_caption('image')
 
-imp = pygame.image.load(".\\country-flags\\ad.png").convert()
+# Pick image
+img_path = ".\\country-flags\\ad.png"
+imp = pygame.image.load(img_path).convert()
+
+# Get code and country name
+country_code = img_path[-6:-4].upper()
+country_name = country_codes[country_code]
 
 # Redimensioning and positioning flag
 flag_x = imp.get_width()
@@ -55,6 +61,11 @@ while (status):
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_BACKSPACE:
 				user_text = user_text[:-1]
+			elif event.key == pygame.K_RETURN:
+				if user_text == country_name:
+					print("Correct")
+				else:
+					print("Wrong")
 			else:
 				user_text += event.unicode
 
