@@ -54,6 +54,14 @@ while status:
         flag_y = imp.get_height()
         end_flag_x = flag_x / 2
         end_flag_y = flag_y / 2
+        if end_flag_x > MAX_FLAG_X:
+            ratio = MAX_FLAG_X/end_flag_x
+            end_flag_x = MAX_FLAG_X
+            end_flag_y = end_flag_y * ratio
+        if end_flag_y > MAX_FLAG_Y:
+            ratio = MAX_FLAG_Y/end_flag_y
+            end_flag_y = MAX_FLAG_Y
+            end_flag_x = end_flag_x * ratio
         flag_dim = (end_flag_x, end_flag_y)
         imp = pygame.transform.scale(imp, flag_dim)
 
