@@ -120,13 +120,20 @@ while status:
             if event.key == pygame.K_BACKSPACE:
                 user_text = user_text[:-1]
             elif event.key == pygame.K_RETURN:
-                if user_text.lower() == country_name.lower():
-                    r_or_w_answer = "Correct"
-                    r_or_w_answer_color = pygame.Color('green')
+                if not r_or_w_visible:
+                    if user_text.lower() == country_name.lower():
+                        r_or_w_answer = "Correct"
+                        r_or_w_answer_color = pygame.Color('green')
+                    else:
+                        r_or_w_answer = "Wrong. Answer: " + country_name + "."
+                        r_or_w_answer_color = pygame.Color('red')
+                    r_or_w_visible = True
                 else:
-                    r_or_w_answer = "Wrong. Answer: " + country_name + "."
-                    r_or_w_answer_color = pygame.Color('red')
-                r_or_w_visible = True
+                    change_flag = True
+
+            elif event.key == pygame.K_TAB:
+                if dropdown_visible and filtered_countries:
+                    user_text = filtered_countries[0]
             else:
                 user_text += event.unicode
 
